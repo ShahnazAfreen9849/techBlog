@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { User } = require('../../models');
 
 router.post('/', async (req, res) => {
+    console.log(req.body);
     try {
         const userData = await User.create(req.body);
         req.session.save(() => {
@@ -17,7 +18,8 @@ router.post('/', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    try {
+    console.log(req.body);
+    //try {
         const userData = await User.findOne({ where: { email: req.body.email } });
 
         if (!userData) {
@@ -27,7 +29,7 @@ router.post('/login', async (req, res) => {
             return;
         }
 
-        const validPassword = await userData.checkPassword(res.body.password);
+        const validPassword = await userData.checkPassword(req.body.password);
 
         if (!validPassword) {
             res
@@ -43,13 +45,13 @@ router.post('/login', async (req, res) => {
             res.json({ user: userData, message: 'You are now logged in!' });
 
         });
-    } catch (err) {
-        res.status(400).json(err);
-    }
+    // } catch (err) {
+    //     res.status(400).json(err);
+    // }
 
 });
 
-router.post('./logout', (req, res) => {
+router.post('/logout', (req, res) => {
     if (req.session.logged_in) {
         req.session.destroy(() => {
             res.status(204).end();
