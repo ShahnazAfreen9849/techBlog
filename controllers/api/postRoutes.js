@@ -1,8 +1,9 @@
 const router = require('express').Router();
-const { Project } = require('../../models');
+const { Post } = require('../../models');
 const withAuth = require('../../utils/auth');
-
+//http://localhost:3001/api/posts/
 router.post('/', async (req, res) => {
+    console.log(req.body)
     try {
         const newPost = await Post.create({
             ...req.body,
@@ -14,7 +15,7 @@ router.post('/', async (req, res) => {
         res.status(400).json(err);
     }
 });
-
+//http://localhost:3001/api/posts/1
 router.delete('/:id', async (req, res) => {
     try {
         const postData = await Post.destroy({
@@ -31,7 +32,7 @@ router.delete('/:id', async (req, res) => {
 
         res.status(200).json(postData);
     } catch (err) {
-        res.status(200).json(postdata);
+        res.status(500).json(err);
     }
 });
 

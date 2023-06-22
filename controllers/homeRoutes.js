@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/Post/:id', async (req, res) => {
+router.get('/post/:id', async (req, res) => {
     try {
         const postData = await Post.findByPk(req.params.id, {
             include: [
@@ -48,20 +48,21 @@ router.get('/Post/:id', async (req, res) => {
 });
 
 router.get('/profile', withAuth, async (req, res) => {
-    try {
+    // try {
         const userData = await User.findByPk(req.session.user_id, {
             attributes: { exclude: ['password'] },
+            include:[{model:Post}]
         });
 
         const user = userData.get({ plain: true });
-
+console.log(user);
         res.render('profile', {
             ...user,
             logged_in: true
         });
-    } catch (err) {
-        res.status(500).json(err);
-    }
+    // } catch (err) {
+        // res.status(500).json(err);
+    // }
 });
 
 router.get('/login', (req,res) => {
